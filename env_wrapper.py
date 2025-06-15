@@ -16,8 +16,8 @@ class GrayResize(ObservationWrapper):
         resized = cv2.resize(gray, (84, 84), interpolation=cv2.INTER_AREA)
         return resized[..., None]
 
-def make_env(seed=None):
-    env = gym_tetris.make("TetrisA-v3", seed=seed)
+def make_env():
+    env = gym_tetris.make("TetrisA-v3")
     env = JoypadSpace(env, ACTIONS)
     env = GrayResize(env)
     return env
