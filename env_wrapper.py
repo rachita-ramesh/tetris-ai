@@ -27,6 +27,18 @@ class GrayResize(ObservationWrapper):
         else:
             # Old gym API - just return the observation
             return self.observation(result)
+    
+    def step(self, action):
+        # Handle both old and new gym API
+        result = self.env.step(action)
+        if len(result) == 4:
+            # Old gym API: (obs, reward, done, info)
+            obs, reward, done, info = result
+            return self.observation(obs), reward, done, info
+        else:
+            # New gym API: (obs, reward, terminated, truncated, info)
+            obs, reward, terminated, truncated, info = result
+            return self.observation(obs), reward, terminated, truncated, info
 
 def make_env():
     env = gym_tetris.make("TetrisA-v3")
