@@ -3,7 +3,7 @@ from env_wrapper import make_env
 from dqn_agent import DQNAgent
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-env = make_env(seed=0)
+env = make_env()
 agent = DQNAgent(n_act=env.action_space.n, device=device)
 wandb.init(project="tetris-dqn")
 
