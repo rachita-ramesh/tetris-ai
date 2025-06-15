@@ -1,6 +1,6 @@
 import gym_tetris
 from nes_py.wrappers import JoypadSpace
-from gym import ObservationWrapper
+from gym import ObservationWrapper, spaces
 import cv2, numpy as np
 from gym_tetris.actions import SIMPLE_MOVEMENT
 import gym
@@ -11,7 +11,7 @@ ACTIONS = SIMPLE_MOVEMENT
 class GrayResize(ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.observation_space = gym.spaces.Box(0, 255, (84, 84, 1), np.uint8)
+        self.observation_space = spaces.Box(0, 255, (84, 84, 1), np.uint8)
 
     def observation(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)

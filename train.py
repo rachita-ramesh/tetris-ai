@@ -9,12 +9,12 @@ wandb.init(project="tetris-dqn")
 
 eps, eps_min, eps_decay = 1.0, 0.05, 1e-6
 steps, sync_every, batch = 0, 10_000, 32
-state, _ = env.reset()
+state = env.reset()
 frames = np.repeat(state,4,axis=2)   # stack 4
 
 while True:
     action = agent.act(frames.transpose(2,0,1), eps)
-    next_state, reward, done, trunc, _ = env.step(action)
+    next_state, reward, done, info = env.step(action)
     next_frames = np.concatenate([frames[:,:,1:], next_state], axis=2)
     agent.remember(frames.transpose(2,0,1), action, reward, next_frames.transpose(2,0,1), done)
     frames = next_frames
@@ -27,6 +27,6 @@ while True:
     if steps % sync_every == 0:
         agent.tgt.load_state_dict(agent.q.state_dict())
 
-    if done or trunc:
-        state, _ = env.reset()
+    if done:
+        state = env.reset()
         frames = np.repeat(state,4,axis=2)
