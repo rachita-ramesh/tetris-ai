@@ -1,6 +1,7 @@
-numpy<2.0.0
-torch
-gym-tetris
-nes-py
-wandb
-opencv-python 
+numpy==1.21.6
+torch==1.13.1
+gym==0.21.0
+gym-tetris==2.8.3
+nes-py==8.2.1
+wandb==0.13.10
+opencv-python==4.7.1.72 

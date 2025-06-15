@@ -6,14 +6,24 @@ Transition = namedtuple("Transition", "s a r s2 done")
 class QNet(nn.Module):
     def __init__(self, n_actions):
         super().__init__()
-        self.net = nn.Sequential(
-            nn.Conv2d(4,32,8,4), nn.ReLU(),    # stack 4 frames
-            nn.Conv2d(32,64,4,2), nn.ReLU(),
-            nn.Conv2d(64,64,3,1), nn.ReLU(),
-            nn.Flatten(),
-            nn.Linear(1024,512), nn.ReLU(),
-            nn.Linear(512,n_actions))
-    def forward(self,x): return self.net(x/255.)
+        self.conv = nn.Sequential(
+            nn.Conv2d(4, 32, 8, 4), nn.ReLU(),    # 84x84x4 -> 20x20x32
+            nn.Conv2d(32, 64, 4, 2), nn.ReLU(),   # 20x20x32 -> 9x9x64
+            nn.Conv2d(64, 64, 3, 1), nn.ReLU(),   # 9x9x64 -> 7x7x64
+        )
+        
+        # Calculate the correct flattened size
+        # After conv layers: 7x7x64 = 3136
+        self.fc = nn.Sequential(
+            nn.Linear(3136, 512), nn.ReLU(),
+            nn.Linear(512, n_actions)
+        )
+    
+    def forward(self, x):
+        x = x / 255.0  # Normalize
+        x = self.conv(x)
+        x = x.view(x.size(0), -1)  # Flatten
+        return self.fc(x)
 
 class DQNAgent:
     def __init__(self, n_act, device):
