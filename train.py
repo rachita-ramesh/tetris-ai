@@ -9,7 +9,14 @@ wandb.init(project="tetris-dqn")
 
 eps, eps_min, eps_decay = 1.0, 0.05, 1e-6
 steps, sync_every, batch = 0, 10_000, 32
-state = env.reset()
+
+# Handle both old and new gym API
+reset_result = env.reset()
+if isinstance(reset_result, tuple):
+    state, _ = reset_result
+else:
+    state = reset_result
+
 frames = np.repeat(state,4,axis=2)   # stack 4
 
 while True:
@@ -28,5 +35,10 @@ while True:
         agent.tgt.load_state_dict(agent.q.state_dict())
 
     if done:
-        state = env.reset()
+        # Handle both old and new gym API
+        reset_result = env.reset()
+        if isinstance(reset_result, tuple):
+            state, _ = reset_result
+        else:
+            state = reset_result
         frames = np.repeat(state,4,axis=2)

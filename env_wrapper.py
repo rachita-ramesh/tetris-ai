@@ -17,6 +17,16 @@ class GrayResize(ObservationWrapper):
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         resized = cv2.resize(gray, (84, 84), interpolation=cv2.INTER_AREA)
         return resized[..., None]
+    
+    def reset(self, **kwargs):
+        # Handle both old and new gym API
+        result = self.env.reset(**kwargs)
+        if isinstance(result, tuple):
+            obs, info = result
+            return self.observation(obs), info
+        else:
+            # Old gym API - just return the observation
+            return self.observation(result)
 
 def make_env():
     env = gym_tetris.make("TetrisA-v3")
