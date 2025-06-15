@@ -1,8 +1,9 @@
 import gym_tetris
 from nes_py.wrappers import JoypadSpace
-from gymnasium import ObservationWrapper
+from gym import ObservationWrapper
 import cv2, numpy as np
 from gym_tetris.actions import SIMPLE_MOVEMENT
+import gym
 
 # Allowed discrete actions - using predefined actions from gym_tetris
 ACTIONS = SIMPLE_MOVEMENT
