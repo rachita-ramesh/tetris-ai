@@ -1,0 +1,6 @@
+numpy<2.0.0
+torch
+gym-tetris
+nes-py
+wandb
+opencv-python 
